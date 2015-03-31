@@ -1,5 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :set_question, only: [:show, :edit, :update, :destroy]
+  before_action :set_poll
+  before_action :set_kind_questions
 
   # GET /questions
   # GET /questions.json
@@ -14,7 +16,7 @@ class QuestionsController < ApplicationController
 
   # GET /questions/new
   def new
-    @question = Question.new
+    @question = @poll.questions.build
   end
 
   # GET /questions/1/edit
@@ -24,11 +26,11 @@ class QuestionsController < ApplicationController
   # POST /questions
   # POST /questions.json
   def create
-    @question = Question.new(question_params)
+    @question = @poll.questions.build(question_params)
 
     respond_to do |format|
       if @question.save
-        format.html { redirect_to @question, notice: 'Question was successfully created.' }
+        format.html { redirect_to @poll, notice: 'Question was successfully created.' }
         format.json { render :show, status: :created, location: @question }
       else
         format.html { render :new }
@@ -70,5 +72,16 @@ class QuestionsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def question_params
       params.require(:question).permit(:title, :kind, :poll_id)
+    end
+
+    def set_poll
+      @poll = Poll.find(params[:poll_id])
+    end
+
+    def set_kind_questions
+      @kind_options = [
+        ["Open Answer", "open"],
+        ["Multiple Choice", "choice"],
+      ]
     end
 end
