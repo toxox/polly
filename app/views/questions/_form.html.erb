@@ -22,8 +22,20 @@
     <% end %>
   </p>
 
-  <%= f.hidden_field :poll_id %>
+  <div class="panel panel-default">
+    <div class="panel-heading">Options</div>
+    <div class="panel-body">
+      <%= f.fields_for :possible_answers do |possible_answer| %>
+        <%= render 'possible_answer_fields', f: possible_answer %>
+      <% end %>
 
+      <div class="links">
+        <%= link_to_add_association 'add option', f, :possible_answers %>
+      </div>
+    </div>
+  </div>
+
+  <%= f.hidden_field :poll_id %>
 
 
   <p>
